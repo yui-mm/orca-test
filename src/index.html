@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif; color: #202936; background: #f3f6fa; }
+    body { margin: 0; padding: 28px 16px 56px; }
+    main { max-width: 860px; margin: auto; }
+    h1 { font-size: 1.7rem; margin: 0 0 8px; }
+    h2 { font-size: 1.2rem; margin: 0 0 16px; }
+    p { line-height: 1.7; }
+    .intro, section, .notice { background: #fff; border: 1px solid #d9e1eb; border-radius: 10px; padding: 20px; margin: 16px 0; }
+    .notice { background: #fff8df; border-color: #ead891; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    label { display: block; font-size: .92rem; font-weight: 600; }
+    input, select, textarea { display: block; width: 100%; box-sizing: border-box; margin-top: 6px; padding: 10px; border: 1px solid #aeb9c7; border-radius: 6px; font: inherit; background: #fff; }
+    textarea { min-height: 90px; resize: vertical; }
+    .wide { grid-column: 1 / -1; }
+    .checks { display: flex; flex-wrap: wrap; gap: 12px; }
+    .checks label { font-weight: 400; }
+    .checks input { display: inline; width: auto; }
+    .participant { border-top: 1px solid #d9e1eb; padding: 16px 0; }
+    button { cursor: pointer; border: 0; border-radius: 6px; padding: 11px 16px; font: inherit; font-weight: 700; background: #155eef; color: #fff; }
+    button.secondary { background: #e7edf5; color: #202936; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    #status { min-height: 1.5em; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .wide { grid-column: auto; } body { padding: 16px 10px 36px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>申請情報整理 PDF の作成</h1>
+    <p>フォームに入力した内容から、社内確認用の PDF を作成してダウンロードします。入力内容は保存されません。必要な資料を手元に用意してから入力してください。</p>
+  </div>
+  <div class="notice"><strong>ご確認ください</strong><br>この PDF は申請情報の整理・確認用で、正式な申請様式ではありません。提出時は厚生労働省の最新様式・要件を確認し、必要に応じて管轄労働局へ相談してください。</div>
+
+  <form id="applicationForm">
+    <section>
+      <h2>1. 会社・計画</h2>
+      <div class="grid">
+        <label>申請事業主名<input name="employerName"></label>
+        <label>雇用保険適用事業所名<input name="workplaceName"></label>
+        <label class="wide">事業所所在地<input name="address"></label>
+        <label>法人番号<input name="corporateNumber"></label>
+        <label>雇用保険適用事業所番号<input name="insuranceOfficeNumber"></label>
+        <label>担当者名<input name="contactName"></label>
+        <label>役職<input name="contactTitle"></label>
+        <label>電話<input name="phone" type="tel"></label>
+        <label>メール<input name="email" type="email"></label>
+        <label>管轄労働局<input name="laborBureau"></label>
+        <label>計画届の提出日<input name="submissionDate" type="date"></label>
+        <label>訓練開始前に計画届を提出済み
+          <select name="submitted"><option value="">選択してください</option><option value="yes">はい</option><option value="no">いいえ</option></select>
+        </label>
+        <div class="wide"><label>事業展開等実施計画の該当項目</label>
+          <div class="checks">
+            <label><input type="checkbox" name="categories" value="事業展開">事業展開</label>
+            <label><input type="checkbox" name="categories" value="DX・デジタル化">DX・デジタル化</label>
+            <label><input type="checkbox" name="categories" value="GX・カーボンニュートラル">GX・カーボンニュートラル</label>
+            <label><input type="checkbox" name="categories" value="人材育成計画に基づく職務">人材育成計画に基づく職務</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. 訓練</h2>
+      <div class="grid">
+        <label>訓練コース名<input name="courseName"></label>
+        <label>講座・科目名<input name="lectureName"></label>
+        <label>訓練実施機関名<input name="providerName"></label>
+        <label>訓練方法<select name="method"><option value="">選択してください</option><option value="elearning">eラーニング</option><option value="correspondence">通信制</option></select></label>
+        <label>訓練開始日<input name="startDate" type="date"></label>
+        <label>訓練終了日<input name="endDate" type="date"></label>
+        <label>標準学習時間（時間）<input name="standardHours" type="number" min="0"></label>
+        <label>標準学習期間（月）<input name="standardMonths" type="number" min="0"></label>
+        <label>受講料（円）<input name="fee" type="number" min="0"></label>
+        <label>税区分<select name="taxType"><option value="">選択してください</option><option>税込</option><option>税抜</option></select></label>
+        <label>支払日<input name="paymentDate" type="date"></label>
+        <label>支払方法<input name="paymentMethod"></label>
+        <label class="wide">研修目的<textarea name="purpose"></textarea></label>
+        <label class="wide">修得した技能を活用する業務<textarea name="application"></textarea></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. 受講者一覧・実施結果</h2>
+      <div id="participants"></div>
+      <button type="button" class="secondary" id="addParticipant">受講者を追加</button>
+    </section>
+
+    <section>
+      <h2>4. 実施結果の説明</h2>
+      <div class="grid">
+        <label class="wide">訓練を実施した理由・業務上の必要性<textarea name="necessity"></textarea></label>
+        <label class="wide">受講内容と事業展開・DX/GX等とのつながり<textarea name="connection"></textarea></label>
+        <label class="wide">受講結果・今後の業務での活用方法<textarea name="outcome"></textarea></label>
+        <label class="wide">計画から変更があった場合の内容・届出状況<textarea name="changes"></textarea></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. 提出前チェック</h2>
+      <div class="checks" style="display:block; line-height:2">
+        <label><input type="checkbox">訓練開始前の計画届提出日と期限を確認した。</label>
+        <label><input type="checkbox">訓練内容・期間・受講者が届出内容と一致している。変更がある場合は変更届を確認した。</label>
+        <label><input type="checkbox">eラーニングは様式第8-3号、通信制は様式第8-4号の最新版を確認した。</label>
+        <label><input type="checkbox">LMS等の受講記録、修了証、通信制の添削課題等を確認した。</label>
+        <label><input type="checkbox">請求書・領収書・振込記録などの支払証憑を準備した。</label>
+        <label><input type="checkbox">最新の公式チェックリストと支給申請期限を確認した。</label>
+        <label><input type="checkbox">不明点を管轄労働局に確認した。</label>
+      </div>
+      <p>チェック状況は PDF に含まれません。提出前確認の参考としてご利用ください。</p>
+      <div class="actions"><button id="submitButton" type="submit">確認用 PDF を作成</button><span id="status" role="status" aria-live="polite"></span></div>
+    </section>
+  </form>
+</main>
+<script>
+  var participantCount = 0;
+  var participantFields = ['name', 'role', 'startDate', 'completionDate', 'status', 'actuals', 'location', 'learned', 'certificate', 'certificateName', 'workPlan'];
+  function addParticipant() {
+    if (participantCount >= 100) return;
+    participantCount++;
+    var block = document.createElement('div');
+    block.className = 'participant';
+    block.innerHTML = '<div class="actions"><strong>受講者 ' + participantCount + '</strong><button type="button" class="secondary remove">削除</button></div>' +
+      '<div class="grid">' +
+      '<label>受講者氏名<input data-field="name"></label><label>所属・職務<input data-field="role"></label>' +
+      '<label>受講開始日<input data-field="startDate" type="date"></label><label>修了日<input data-field="completionDate" type="date"></label>' +
+      '<label>修了状況<select data-field="status"><option value="">選択してください</option><option>修了</option><option>未修了</option><option>受講中</option></select></label>' +
+      '<label>受講実績（時間・進捗率等）<input data-field="actuals"></label><label>学習場所<input data-field="location"></label>' +
+      '<label>修了証等<select data-field="certificate"><option value="">選択してください</option><option value="yes">あり</option><option value="no">なし</option></select></label>' +
+      '<label>修了証等の書類名<input data-field="certificateName"></label>' +
+      '<label class="wide">修得内容<textarea data-field="learned"></textarea></label><label class="wide">実務への活用予定<textarea data-field="workPlan"></textarea></label></div>';
+    block.querySelector('.remove').addEventListener('click', function() { block.remove(); });
+    document.getElementById('participants').appendChild(block);
+  }
+  document.getElementById('addParticipant').addEventListener('click', addParticipant);
+  addParticipant();
+
+  function valuesFor(prefix) {
+    var result = {};
+    document.querySelectorAll('[name]').forEach(function(field) {
+      if (!field.name.startsWith(prefix)) return;
+      if (field.type === 'checkbox') {
+        if (!result[field.name]) result[field.name] = [];
+        if (field.checked) result[field.name].push(field.value);
+      } else result[field.name] = field.value;
+    });
+    return result;
+  }
+  document.getElementById('applicationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var button = document.getElementById('submitButton');
+    var status = document.getElementById('status');
+    button.disabled = true;
+    status.textContent = 'PDF を作成しています…';
+    var company = valuesFor('');
+    var plan = { submissionDate: company.submissionDate, submitted: company.submitted, categories: company.categories || [] };
+    var training = {};
+    ['courseName','lectureName','providerName','method','startDate','endDate','standardHours','standardMonths','fee','taxType','paymentDate','paymentMethod','purpose','application'].forEach(function(key) { training[key] = document.querySelector('[name="' + key + '"]').value; });
+    var result = {};
+    ['necessity','connection','outcome','changes'].forEach(function(key) { result[key] = document.querySelector('[name="' + key + '"]').value; });
+    var participants = Array.prototype.map.call(document.querySelectorAll('.participant'), function(block) {
+      var person = {};
+      participantFields.forEach(function(key) { person[key] = block.querySelector('[data-field="' + key + '"]').value; });
+      return person;
+    });
+    var payload = { company: company, plan: plan, training: training, participants: participants, result: result };
+    google.script.run.withSuccessHandler(function(file) {
+      try {
+        var binary = atob(file.base64);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = file.filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+        status.textContent = 'PDF をダウンロードしました。入力内容は保存されません。';
+      } catch (error) { status.textContent = 'PDF のダウンロードに失敗しました。もう一度お試しください。'; }
+      button.disabled = false;
+    }).withFailureHandler(function(error) {
+      status.textContent = 'PDF を作成できませんでした。時間をおいて再度お試しください。入力内容は保存されていません。';
+      button.disabled = false;
+    }).createPdf(payload);
+  });
+</script>
+</body>
+</html>
