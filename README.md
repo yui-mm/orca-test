@@ -5,7 +5,7 @@ Google Apps Script の Web アプリとして動作する、日本語の入力�
 ## デプロイ
 
 1. Google Apps Script で新しいプロジェクトを作成します。
-2. `Code.gs`、`Index.html`、`appsscript.json` の内容をプロジェクトに反映します。
+2. `Code.gs`、`Pdf.gs`、`Index.html`、`appsscript.json` の内容をプロジェクトに反映します。
 3. **デプロイ → 新しいデプロイ → ウェブアプリ**を選び、利用者に応じたアクセス権を設定します。PDF生成には、デプロイしたユーザーの Google ドキュメントと Drive へのアクセス許可が必要です。
 4. 発行された URL でフォームを開きます。
 

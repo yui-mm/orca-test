@@ -5,41 +5,69 @@ function doGet() {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
-/**
- * Creates a PDF from a validated, transient payload. The temporary document is
- * always moved to trash, including when PDF conversion fails.
- */
+/** Creates a Japanese review PDF from validated form data without persisting it. */
 function generatePdf(payload) {
   const data = validatePayload_(payload);
-  const document = DocumentApp.create('訓練実施結果_' + new Date().getTime());
-  try {
-    const body = document.getBody();
-    body.appendParagraph('訓練実施結果 入力内容').setHeading(DocumentApp.ParagraphHeading.TITLE);
-    body.appendParagraph('この文書は入力内容の確認用です。公式様式の代わりにはなりません。');
-    appendSection_(body, '1. 会社・計画の情報', data.company);
-    appendSection_(body, '2. 訓練の基本情報', data.training);
-    data.attendees.forEach(function (attendee, index) {
-      appendSection_(body, '3. 受講者 ' + (index + 1), attendee);
-    });
-    appendSection_(body, '4. 実施結果の説明', data.results);
-    document.saveAndClose();
-    const pdf = DriveApp.getFileById(document.getId()).getAs(MimeType.PDF);
-    return { filename: '訓練実施結果.pdf', mimeType: 'application/pdf', data: Utilities.base64Encode(pdf.getBytes()) };
-  } finally {
-    DriveApp.getFileById(document.getId()).setTrashed(true);
-  }
-}
-
-function appendSection_(body, title, values) {
-  body.appendParagraph(title).setHeading(DocumentApp.ParagraphHeading.HEADING1);
-  Object.keys(values).forEach(function (key) {
-    const value = values[key];
-    if (Array.isArray(value)) {
-      body.appendParagraph(key + '：' + value.join('、'));
-    } else if (value !== '') {
-      body.appendParagraph(key + '：' + value);
+  const pdf = generatePdf_({
+    company: {
+      employerName: data.company['事業主名'],
+      workplaceName: data.company['雇用保険適用事業所名'],
+      address: data.company['所在地'],
+      corporateNumber: data.company['法人番号'],
+      insuranceOfficeNumber: data.company['雇用保険適用事業所番号'],
+      contactName: data.company['担当者・役職'],
+      phone: data.company['電話'],
+      email: data.company['メール'],
+      laborBureau: data.company['管轄労働局']
+    },
+    plan: {
+      submissionDate: data.company['計画届提出日'],
+      submitted: data.company['提出済み確認'],
+      categories: data.company['該当区分']
+    },
+    training: {
+      courseName: data.training['訓練コース名'],
+      lectureName: data.training['講座名'],
+      providerName: data.training['訓練機関名'],
+      method: data.training['実施方法'],
+      startDate: data.training['開始日'],
+      endDate: data.training['終了日'],
+      standardHours: data.training['標準学習時間'],
+      standardMonths: data.training['標準学習期間'],
+      fee: data.training['費用'],
+      taxType: data.training['税区分'],
+      paymentDate: data.training['支払日'],
+      paymentMethod: data.training['支払方法'],
+      purpose: data.training['訓練目的'],
+      application: data.training['業務上の活用']
+    },
+    participants: data.attendees.map(function (attendee) {
+      return {
+        name: attendee['氏名'],
+        role: attendee['所属・職務'],
+        startDate: attendee['受講開始日'],
+        completionDate: attendee['修了日'],
+        status: attendee['修了状況'],
+        actuals: attendee['実績'],
+        location: attendee['学習場所'],
+        learned: attendee['修得内容'],
+        certificate: attendee['証明書有無'],
+        certificateName: attendee['証明書名称'],
+        workPlan: attendee['実務活用予定']
+      };
+    }),
+    result: {
+      necessity: data.results['訓練の必要性'],
+      connection: data.results['事業展開・DX・GXとのつながり'],
+      outcome: data.results['結果と活用'],
+      changes: data.results['計画変更と届出状況']
     }
   });
+  return {
+    filename: pdf.getName(),
+    mimeType: 'application/pdf',
+    data: Utilities.base64Encode(pdf.getBytes())
+  };
 }
 
 function validatePayload_(payload) {
