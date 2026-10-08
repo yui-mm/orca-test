@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <style>
+    :root{font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;color:#202b3c;background:#f4f7fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:960px;margin:32px auto;padding:0 18px 56px}header,.card{background:#fff;border:1px solid #dce4ef;border-radius:14px;padding:24px;margin-bottom:18px}h1{font-size:1.65rem;margin:0 0 8px}h2{font-size:1.2rem;margin:0 0 18px;color:#194a72}p{line-height:1.7}.notice{background:#fff8e6;border-left:4px solid #d18a00;padding:12px 16px;margin-top:16px}.privacy{background:#eaf6f1;border-left:4px solid #28805a;padding:12px 16px;margin-top:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label,.label{font-weight:650;font-size:.94rem}input,select,textarea{font:inherit;border:1px solid #bcc9d8;border-radius:7px;padding:10px;background:#fff;width:100%}textarea{min-height:94px;resize:vertical}.checks{display:flex;flex-wrap:wrap;gap:14px;padding:8px 0}.checks label{font-weight:400}.attendee{border:1px solid #dce4ef;border-radius:10px;padding:18px;margin:14px 0}.attendee h3{margin:0 0 14px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{font:inherit;font-weight:650;border:0;border-radius:8px;padding:11px 18px;cursor:pointer;background:#1769aa;color:#fff}button.secondary{background:#e7eef5;color:#183c5b}button.remove{background:#fff0ef;color:#a32920;padding:6px 12px}button:disabled{opacity:.55;cursor:wait}#status{font-weight:650;white-space:pre-wrap}.required{color:#b42318}.help{font-size:.88rem;color:#526174}@media(max-width:640px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.wrap{margin-top:14px;padding:0 10px 32px}header,.card{padding:17px}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>訓練実施結果 入力フォーム</h1>
+    <p>事業主・訓練・受講者の情報をまとめて入力し、確認用PDFを作成します。</p>
+    <div class="notice"><strong>このフォームとPDFは、厚生労働省の提出様式の代わりではありません。</strong>支給申請には、管轄労働局が案内する最新の公式様式をご利用ください。このフォームは受給可否を判定しません。</div>
+    <div class="privacy">入力値は申請者のブラウザーに保存されません。PDF生成のため一時的なGoogleドキュメントを作成し、PDF出力後にゴミ箱へ移します。</div>
+  </header>
+  <form id="intake" autocomplete="off" novalidate>
+    <section class="card"><h2>1. 事業主・計画情報</h2><div class="grid">
+      <div class="field"><label for="事業主名">事業主名 <span class="required">必須</span></label><input id="事業主名" name="事業主名" required></div>
+      <div class="field"><label for="雇用保険適用事業所名">雇用保険適用事業所名</label><input id="雇用保険適用事業所名" name="雇用保険適用事業所名"></div>
+      <div class="field full"><label for="所在地">所在地</label><input id="所在地" name="所在地" autocomplete="off"></div>
+      <div class="field"><label for="法人番号">法人番号</label><input id="法人番号" name="法人番号" inputmode="numeric" pattern="[0-9]{13}" maxlength="13"></div>
+      <div class="field"><label for="雇用保険適用事業所番号">雇用保険適用事業所番号</label><input id="雇用保険適用事業所番号" name="雇用保険適用事業所番号"></div>
+      <div class="field"><label for="担当者・役職">担当者・役職</label><input id="担当者・役職" name="担当者・役職"></div>
+      <div class="field"><label for="電話">電話</label><input id="電話" name="電話" type="tel" autocomplete="off"></div>
+      <div class="field"><label for="メール">メール <span class="required">必須</span></label><input id="メール" name="メール" type="email" required autocomplete="off"></div>
+      <div class="field"><label for="管轄労働局">管轄労働局</label><input id="管轄労働局" name="管轄労働局"></div>
+      <div class="field"><label for="計画届提出日">計画届提出日</label><input id="計画届提出日" name="計画届提出日" type="date"></div>
+      <div class="field"><span class="label">計画届の提出状況</span><div class="checks"><label><input type="radio" name="提出済み確認" value="提出済み"> 提出済み</label><label><input type="radio" name="提出済み確認" value="未提出"> 未提出</label><label><input type="radio" name="提出済み確認" value="未確認"> 未確認</label></div></div>
+      <div class="field full"><span class="label">事業展開等実施計画の該当区分（複数選択可）</span><div class="checks"><label><input type="checkbox" name="該当区分" value="事業展開"> 事業展開</label><label><input type="checkbox" name="該当区分" value="DX・デジタル化"> DX・デジタル化</label><label><input type="checkbox" name="該当区分" value="GX・カーボンニュートラル"> GX・カーボンニュートラル</label><label><input type="checkbox" name="該当区分" value="人材育成計画に基づく職務"> 人材育成計画に基づく職務</label></div></div>
+    </div></section>
+    <section class="card"><h2>2. 訓練情報</h2><div class="grid">
+      <div class="field"><label for="訓練コース名">訓練コース名 <span class="required">必須</span></label><input id="訓練コース名" name="訓練コース名" required></div>
+      <div class="field"><label for="講座名">講座名</label><input id="講座名" name="講座名"></div>
+      <div class="field"><label for="訓練機関名">訓練機関名</label><input id="訓練機関名" name="訓練機関名"></div>
+      <div class="field"><label for="実施方法">実施方法</label><select id="実施方法" name="実施方法"><option value="">選択してください</option><option>eラーニング</option><option>通信制</option></select></div>
+      <div class="field"><label for="開始日">訓練開始日 <span class="required">必須</span></label><input id="開始日" name="開始日" type="date" required></div>
+      <div class="field"><label for="終了日">訓練終了日 <span class="required">必須</span></label><input id="終了日" name="終了日" type="date" required></div>
+      <div class="field"><label for="標準学習時間">標準学習時間（時間）</label><input id="標準学習時間" name="標準学習時間" type="number" min="0" step="0.1"></div>
+      <div class="field"><label for="標準学習期間">標準学習期間</label><input id="標準学習期間" name="標準学習期間" placeholder="例：3か月"></div>
+      <div class="field"><label for="費用">費用</label><input id="費用" name="費用" type="number" min="0"></div>
+      <div class="field"><label for="税区分">税区分</label><select id="税区分" name="税区分"><option value="">選択してください</option><option>税込</option><option>税抜</option></select></div>
+      <div class="field"><label for="支払日">支払日</label><input id="支払日" name="支払日" type="date"></div>
+      <div class="field"><label for="支払方法">支払方法</label><input id="支払方法" name="支払方法" placeholder="例：銀行振込"></div>
+      <div class="field full"><label for="訓練目的">訓練目的</label><textarea id="訓練目的" name="訓練目的"></textarea></div>
+      <div class="field full"><label for="業務上の活用">修得した知識・技能を使う業務</label><textarea id="業務上の活用" name="業務上の活用"></textarea></div>
+      <div class="field full"><span class="label">計画届に記載した時間・期間との一致</span><div class="checks"><label><input type="radio" name="計画との一致" value="一致"> 一致</label><label><input type="radio" name="計画との一致" value="変更あり"> 変更あり</label><label><input type="radio" name="計画との一致" value="未確認"> 未確認</label></div></div>
+    </div></section>
+    <section class="card"><h2>3. 受講者</h2><p class="help">受講者ごとに入力してください。修了していない場合は理由・受講実績も記録してください。</p><div id="attendees"></div><button class="secondary" type="button" id="addAttendee">＋ 受講者を追加</button></section>
+    <section class="card"><h2>4. 実施結果の説明</h2><div class="grid">
+      <div class="field full"><label for="訓練の必要性">訓練の必要性・業務上の理由</label><textarea id="訓練の必要性" name="訓練の必要性"></textarea></div>
+      <div class="field full"><label for="事業展開・DX・GXとのつながり">事業展開・DX・GXとのつながり</label><textarea id="事業展開・DX・GXとのつながり" name="事業展開・DX・GXとのつながり"></textarea></div>
+      <div class="field full"><label for="結果と活用">訓練の結果と今後の活用</label><textarea id="結果と活用" name="結果と活用"></textarea></div>
+      <div class="field full"><label for="計画変更と届出状況">計画変更の内容と届出状況</label><textarea id="計画変更と届出状況" name="計画変更と届出状況"></textarea></div>
+    </div><div class="actions"><button id="submit" type="submit">確認用PDFを作成</button><span id="status" role="status" aria-live="polite"></span></div></section>
+  </form>
+</main>
+<template id="attendeeTemplate"><fieldset class="attendee"><legend class="help">受講者</legend><h3>受講者 <span class="number"></span> <button type="button" class="remove">削除</button></h3><div class="grid">
+  <div class="field"><label>氏名 <span class="required">必須</span></label><input data-key="氏名" required></div><div class="field"><label>所属・職務</label><input data-key="所属・職務"></div>
+  <div class="field"><label>受講開始日</label><input data-key="受講開始日" type="date"></div><div class="field"><label>修了日</label><input data-key="修了日" type="date"></div>
+  <div class="field"><label>修了状況</label><select data-key="修了状況"><option value="">選択してください</option><option>修了</option><option>未修了</option><option>受講中</option></select></div><div class="field"><label>実績（受講時間・進捗率等）</label><input data-key="実績"></div>
+  <div class="field"><label>学習場所</label><input data-key="学習場所"></div><div class="field"><label>証明書有無</label><select data-key="証明書有無"><option value="">選択してください</option><option>あり</option><option>なし</option></select></div>
+  <div class="field"><label>証明書名称・発行元</label><input data-key="証明書名称"></div><div class="field full"><label>修得内容</label><textarea data-key="修得内容"></textarea></div><div class="field full"><label>実務への活用予定</label><textarea data-key="実務活用予定"></textarea></div>
+</div></fieldset></template>
+<script>
+  const list = document.getElementById('attendees');
+  function addAttendee(){const node=document.getElementById('attendeeTemplate').content.cloneNode(true);node.querySelector('.remove').addEventListener('click',()=>{if(list.querySelectorAll('.attendee').length>1){node.querySelector('.attendee').remove();renumber();}});list.appendChild(node);renumber();}
+  function renumber(){list.querySelectorAll('.attendee').forEach((el,i)=>{el.querySelector('.number').textContent=i+1;});}
+  addAttendee();document.getElementById('addAttendee').addEventListener('click',addAttendee);
+  function groupFromForm(form, names){const data={};for(const name of names){const fields=[...form.querySelectorAll('[name="'+CSS.escape(name)+'"]')];if(fields.some(el=>el.type==='checkbox'))data[name]=fields.filter(el=>el.checked).map(el=>el.value);else if(fields.some(el=>el.type==='radio'))data[name]=(fields.find(el=>el.checked)||{}).value||'';else data[name]=(fields[0]||{}).value||'';}return data;}
+  document.getElementById('intake').addEventListener('submit',function(event){event.preventDefault();const form=event.currentTarget;form.querySelectorAll('[required]').forEach(el=>el.setCustomValidity(''));if(!form.reportValidity())return;
+    const companyKeys=['事業主名','雇用保険適用事業所名','所在地','法人番号','雇用保険適用事業所番号','担当者・役職','電話','メール','管轄労働局','計画届提出日','提出済み確認','該当区分'];
+    const trainingKeys=['訓練コース名','講座名','訓練機関名','実施方法','開始日','終了日','標準学習時間','標準学習期間','費用','税区分','支払日','支払方法','訓練目的','業務上の活用','計画との一致'];
+    const resultKeys=['訓練の必要性','事業展開・DX・GXとのつながり','結果と活用','計画変更と届出状況'];
+    const training=groupFromForm(form,trainingKeys);if(training['終了日']<training['開始日']){document.getElementById('終了日').setCustomValidity('終了日は開始日以降の日付を指定してください。');document.getElementById('終了日').reportValidity();return;}
+    const attendees=[...list.querySelectorAll('.attendee')].map(el=>{const item={};el.querySelectorAll('[data-key]').forEach(input=>item[input.dataset.key]=input.value);return item;});
+    for(const attendee of attendees){if(attendee['受講開始日']&&attendee['修了日']&&attendee['修了日']<attendee['受講開始日']){alert('受講者の修了日は受講開始日以降にしてください。');return;}}
+    const submit=document.getElementById('submit'),status=document.getElementById('status');submit.disabled=true;status.textContent='PDFを作成しています…';
+    google.script.run.withSuccessHandler(file=>{submit.disabled=false;status.textContent='PDFを作成しました。';const bytes=Uint8Array.from(atob(file.data),c=>c.charCodeAt(0));const url=URL.createObjectURL(new Blob([bytes],{type:file.mimeType}));const a=document.createElement('a');a.href=url;a.download=file.filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);form.reset();list.innerHTML='';addAttendee();}).withFailureHandler(error=>{submit.disabled=false;status.textContent='PDFを作成できませんでした：'+(error.message||'入力内容を確認してください。');}).generatePdf({company:groupFromForm(form,companyKeys),training:training,attendees:attendees,results:groupFromForm(form,resultKeys)});
+  });
+</script>
+</body>
+</html>
